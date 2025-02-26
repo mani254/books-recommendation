@@ -1,4 +1,10 @@
 const Book = require('../schema/book');
+const Genre = require('../schema/genre')
+const Author = require('../schema/author')
+const { ObjectId } = require("mongoose").Types;
+const fs = require("fs");
+const path = require("path");
+
 
 class booksService {
    getMatchStage(query) {
@@ -83,6 +89,73 @@ class booksService {
       } catch (error) {
          console.error("Error in book aggregation:", error);
          throw new Error(error.message);
+      }
+   }
+
+   async fetchBook(id) {
+      try {
+         const book = await Book.findById(id)
+         return book
+      } catch (err) {
+         console.log(err)
+         throw new Error(err.message);
+      }
+
+   }
+
+   async addBook(book) {
+      try {
+         const { genre, author } = book
+
+         let existingGenre = await Genre.findOne({ name: genre });
+         if (!existingGenre) {
+            existingGenre = new Genre({ name: genre });
+            await existingGenre.save();
+         }
+
+
+         let existingAuthor = await Author.findOne({ name: author });
+         if (!existingAuthor) {
+            existingAuthor = new Author({ name: author });
+            await existingAuthor.save();
+         }
+
+         book.author = existingAuthor._id
+         book.genre = existingGenre._id
+
+         const newBook = await Book.create(book)
+
+         return newBook
+
+      }
+      catch (error) {
+         console.error("Error in adding product:", error);
+         throw new Error(error.message);
+      }
+   }
+
+   async deleteBook(id) {
+      try {
+         if (!ObjectId.isValid(id)) {
+            throw new Error("Invalid book ID format.");
+         }
+         const book = await Book.findById(id);
+         if (!book) {
+            throw new Error("Book not found.");
+         }
+         if (book.image) {
+            const imagePath = path.join(__dirname, "..", book.image);
+            fs.unlink(imagePath, (err) => {
+               if (err && err.code !== "ENOENT") {
+                  console.error("Error deleting image:", err);
+               }
+            });
+         }
+         const delBook = await Book.findByIdAndDelete(id);
+         return delBook
+      } catch (err) {
+         console.error("Error deleting book:", err);
+         throw new Error(err.message);
       }
    }
 }

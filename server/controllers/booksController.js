@@ -31,6 +31,79 @@ const booksController = {
       }
    },
 
+   async fetchBook(req, res) {
+      try {
+         const { id } = req.params
+         if (!id) {
+            return res.status(401).json({ message: "invalid id" })
+         }
+         const book = await booksService.fetchBook(id)
+         if (book) {
+            return res.status(200).json({ book, message: 'Book fetched successfully' });
+
+         }
+         else {
+            return res.status(404).json({ message: "Book not found" });
+
+         }
+      }
+      catch (err) {
+         console.error("Error fetching book:", err);
+         res.status(500).json({ message: "Internal server error", error: err.message });
+      }
+
+   },
+
+   async addBook(req, res) {
+      try {
+         const { title, overview, description, publishedYear, genre, author } = req.body
+
+         if (!title || !overview || !publishedYear || !genre || !author) {
+            return res.status(400).json({ message: "All fields are required (title, overview, description, publishedYear, genre, author)." });
+         }
+
+         // 2️⃣ Validate data types
+         if (typeof title !== "string" || typeof overview !== "string" || typeof description !== "string") {
+            return res.status(400).json({ message: "Title, overview, and description must be strings." });
+         }
+
+         if (!Number.isInteger(publishedYear) || publishedYear < 1000 || publishedYear > new Date().getFullYear()) {
+            return res.status(400).json({ message: "Published year must be a valid 4-digit number." });
+         }
+
+         if (!req.file) {
+            return res.status(400).json({ message: "At least one image must be uploaded" });
+         }
+
+         req.body.image = req.file.path
+
+         const book = await booksService.addBook(req.body)
+
+         return res.status(200).json({ book, message: "Book added succesfully" })
+
+      }
+      catch (err) {
+         console.error("Error adding books:", err);
+         res.status(500).json({ message: "Internal server error", error: err.message });
+      }
+   },
+
+   async deleteBook(req, res) {
+      try {
+         const { id } = req.params;
+         if (!id) {
+            return res.status(400).json({ message: "Book ID is required." });
+         }
+
+         const book = await booksService.deleteBook(id);
+         if (book) {
+            return res.status(200).json({ book, message: "book deleted succesfull" });
+         }
+      } catch (err) {
+         console.error("Error deleting book:", err);
+         res.status(500).json({ message: "Internal server error", error: err.message });
+      }
+   }
 
 };
 
