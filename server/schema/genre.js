@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose')
 
 const genreSchema = new mongoose.Schema(
    {
@@ -12,4 +12,5 @@ const genreSchema = new mongoose.Schema(
    { timestamps: true }
 );
 
-export default mongoose.model("Genre", genreSchema);
+const Genre = mongoose.model("Genre", genreSchema);
+module.exports = Genre
