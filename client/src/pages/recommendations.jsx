@@ -16,9 +16,9 @@ export default function Recommendations() {
 		const fetchRecommendedBooks = async () => {
 			try {
 				setLoading(true);
-				const response = await axios.get("http://localhost:8080/api/recommendations", { withCredentials: true });
+				const response = await axios.get("http://localhost:8080/api/recommendations", { params: searchParams });
 				setBooks(response.data.recommendedBooks);
-				setTotalItems(response.data.recommendedBooks.length);
+				setTotalItems(response.data.totalItems);
 			} catch (err) {
 				setError("Failed to load recommended books. Please try again.");
 			} finally {
@@ -27,7 +27,7 @@ export default function Recommendations() {
 		};
 
 		fetchRecommendedBooks();
-	}, []);
+	}, [searchParams]);
 
 	const limit = parseInt(searchParams.limit, 10) || 10;
 
