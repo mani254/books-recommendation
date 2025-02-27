@@ -22,7 +22,7 @@ const AddBookIcon = () => (
 const navItems = [
 	{ label: "Recommendations", icon: RecommendationsIcon, link: "/recommendations" },
 	{ label: "Books", icon: BooksIcon, link: "/books" },
-	{ label: "Add Book", icon: AddBookIcon, link: "/addbook" },
+	{ label: "Add Book", icon: AddBookIcon, link: "/books/add" },
 ];
 
 function Navbar() {

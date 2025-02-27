@@ -9,17 +9,11 @@ export default function Books() {
 	const [books, setBooks] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-	const initialRender = useRef(true);
 	const [totalItems, setTotalItems] = useState(0);
 	const router = useRouter();
 	const searchParams = router.query;
 
 	useEffect(() => {
-		if (initialRender.current) {
-			initialRender.current = false;
-			return;
-		}
-
 		const fetchBooks = async () => {
 			try {
 				setLoading(true);

@@ -67,9 +67,9 @@ const booksController = {
             return res.status(400).json({ message: "Title, overview, and description must be strings." });
          }
 
-         if (!Number.isInteger(publishedYear) || publishedYear < 1000 || publishedYear > new Date().getFullYear()) {
-            return res.status(400).json({ message: "Published year must be a valid 4-digit number." });
-         }
+         // if (!Number.isInteger(publishedYear) || Number(publishedYear) < 1000 || Number(publishedYear) > 9999) {
+         //    return res.status(400).json({ message: "Published year must be a valid 4-digit number." });
+         // }
 
          if (!req.file) {
             return res.status(400).json({ message: "At least one image must be uploaded" });

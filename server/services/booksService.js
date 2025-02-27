@@ -26,7 +26,7 @@ class booksService {
          const { sortBy = "createdAt", sortOrder = "desc", page = 1, limit = 10, genre, author } = query;
 
          const fetchingOptions = {
-            _id: 1, title: 1, overview: 1, "author.name": 1, "genre.name": 1, publishedYear: 1, createdAt: 1
+            _id: 1, title: 1, overview: 1, "author.name": 1, "genre.name": 1, publishedYear: 1, createdAt: 1, image: 1
          };
 
          const pageNumber = parseInt(page, 10) || 1;
