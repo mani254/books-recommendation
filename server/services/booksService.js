@@ -96,6 +96,8 @@ class booksService {
    async fetchBook(id) {
       try {
          const book = await Book.findById(id)
+            .populate('genre')
+            .populate('author');
          return book
       } catch (err) {
          console.log(err)

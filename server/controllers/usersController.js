@@ -112,6 +112,83 @@ const usersController = {
          console.error("Error during initial login:", error);
          res.status(500).json({ message: "Internal server error", error: error.message });
       }
+   },
+
+   async fetchPreferences(req, res) {
+      try {
+         const userId = req.userId;
+
+
+         const user = await User.findById(userId)
+            .populate('preferences.genres')
+            .populate('preferences.authors')
+            .select('preferences');
+
+         if (!user) {
+            return res.status(404).json({ message: "User not found" });
+         }
+
+         const genres = user.preferences.genres;
+         const authors = user.preferences.authors;
+
+         return res.status(200).json({ authors, genres, message: 'Fetched preferences successfully' });
+
+      } catch (err) {
+         console.error("Error fetching preferences:", err);
+         res.status(500).json({ message: "Internal server error", error: err.message });
+      }
+   },
+
+   async updatePreferences(req, res) {
+      try {
+         const userId = req.userId;
+         const { type, itemId, action } = req.body;
+
+
+         if (!["genre", "author"].includes(type) || !["add", "remove"].includes(action)) {
+            return res.status(400).json({ message: "Invalid type or action" });
+         }
+
+
+         const user = await User.findById(userId);
+         if (!user) {
+            return res.status(404).json({ message: "User not found" });
+         }
+
+
+         if (!user.preferences) {
+            user.preferences = { genres: [], authors: [] };
+         }
+
+
+         const field = type === "genre" ? "genres" : "authors";
+
+
+         if (!Array.isArray(user.preferences[field])) {
+            user.preferences[field] = [];
+         }
+
+
+         if (action === "add") {
+            if (!user.preferences[field].includes(itemId)) {
+               user.preferences[field].push(itemId);
+            }
+         } else {
+            user.preferences[field] = user.preferences[field].filter((id) => id.toString() !== itemId);
+         }
+
+
+         await user.save();
+
+         return res.status(200).json({
+            message: "Preferences updated successfully",
+            updatedPreferences: user.preferences
+         });
+
+      } catch (err) {
+         console.error("Error updating preferences:", err);
+         return res.status(500).json({ message: "Internal server error", error: err.message });
+      }
    }
 
 };

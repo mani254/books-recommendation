@@ -15,6 +15,20 @@ const userSchema = new mongoose.Schema(
       admin: {
          type: Boolean,
          default: false
+      },
+      preferences: {
+         genres: [
+            {
+               type: mongoose.Schema.Types.ObjectId,
+               ref: "Genre"
+            }
+         ],
+         authors: [
+            {
+               type: mongoose.Schema.Types.ObjectId,
+               ref: "Author",
+            }
+         ]
       }
    },
    { timestamps: true }
