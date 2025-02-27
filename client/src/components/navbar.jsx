@@ -30,6 +30,7 @@ const navItems = [
 	{ label: "Books", icon: BooksIcon, link: "/books" },
 	{ label: "Add Book", icon: AddBookIcon, link: "/books/add" },
 	{ label: "Prefrence setting", icon: SettingsIcon, link: "/preferences" },
+	{ label: "Login", icon: SettingsIcon, link: "/login" },
 ];
 
 function Navbar() {
