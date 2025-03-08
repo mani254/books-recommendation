@@ -1,19 +1,17 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Link from "next/link"; // Import Link from Next.js
+import Link from "next/link";
 import ImageComponent from "./ImageComponent";
 
-function BookCard({ book, onDelete }) {
-	const isAdmin = localStorage.getItem("isAdmin");
+function BookCard({ book, setBooks }) {
+	const [isAdmin, setIsAdmin] = useState(false);
 
 	const handleDelete = async () => {
 		try {
-			const response = await axios.delete(`http://localhost:8080/api/books/${book._id}`);
+			const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/books/${book._id}`);
 
 			if (response.status === 200) {
-				if (onDelete) {
-					onDelete(book._id);
-				}
+				setBooks((prevBooks) => prevBooks.filter((b) => b._id !== book._id));
 				alert("Book deleted successfully!");
 			}
 		} catch (error) {
@@ -21,6 +19,11 @@ function BookCard({ book, onDelete }) {
 			alert("There was an error deleting the book. Please try again.");
 		}
 	};
+
+	useEffect(() => {
+		const storedIsAdmin = JSON.parse(localStorage.getItem("isAdmin") || "false");
+		setIsAdmin(storedIsAdmin);
+	}, []);
 
 	return (
 		<div className="max-w-xs bg-white rounded-2xl shadow-lg overflow-hidden relative group p-4 transition-all duration-300 hover:shadow-2xl">
@@ -44,7 +47,6 @@ function BookCard({ book, onDelete }) {
 						</svg>
 					</p>
 				</Link>
-
 				{isAdmin && (
 					<button className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-200 transition" onClick={handleDelete}>
 						<svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

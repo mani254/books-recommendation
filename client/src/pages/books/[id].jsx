@@ -17,7 +17,7 @@ const BookDetails = () => {
 		const fetchBookData = async () => {
 			try {
 				setLoading(true);
-				const response = await axios.get(`http://localhost:8080/api/books/${id}`);
+				const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/books/${id}`);
 				setBook(response.data.book);
 				setLoading(false);
 			} catch (err) {

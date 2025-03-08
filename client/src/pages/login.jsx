@@ -27,11 +27,12 @@ function Login() {
 
 		setLoading(true);
 		try {
-			const response = await axios.post("http://localhost:8080/api/users/login", loginDetails);
+			const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/users/login`, loginDetails);
 
 			if (response.status === 200) {
 				localStorage.setItem("authToken", response.data.token);
 				localStorage.setItem("isAdmin", response.data.isAdmin);
+				localStorage.setItem("username", response.data.username);
 				alert("Login successful!");
 				router.push("/books");
 			}

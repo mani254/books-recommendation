@@ -3,6 +3,7 @@ import axios from "axios";
 import BookCard from "@/components/bookCard";
 import Pagination from "@/components/pagination";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function Recommendations() {
 	const [books, setBooks] = useState([]);
@@ -16,7 +17,7 @@ export default function Recommendations() {
 		const fetchRecommendedBooks = async () => {
 			try {
 				setLoading(true);
-				const response = await axios.get("http://localhost:8080/api/recommendations", { params: searchParams });
+				const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/recommendations`, { params: searchParams });
 				setBooks(response.data.recommendedBooks);
 				setTotalItems(response.data.totalItems);
 			} catch (err) {
@@ -52,7 +53,18 @@ export default function Recommendations() {
 			<h4 className="mb-5">Recommended Books 📖</h4>
 			<div>
 				{books.length === 0 ? (
-					<p className="text-center text-gray-600">No recommendations available.</p>
+					<>
+						<p className="text-center text-gray-600">
+							You currently don't have any recommendations because your preferences are not set.
+							<br />
+							<span className="text-sm">Set your preferences to get personalized recommendations.</span>
+						</p>
+						<div className="text-center mt-4">
+							<Link href="/preferences">
+								<span className="inline-block bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300">Set Your Preferences</span>
+							</Link>
+						</div>
+					</>
 				) : (
 					<div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 						{books.slice(0, limit).map((book) => (

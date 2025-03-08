@@ -66,7 +66,7 @@ const usersController = {
             httpOnly: true,
             sameSite: 'None',
             secure: true,
-         }).json({ message: "Login successful", token, isAdmin: user.admin });
+         }).json({ message: "Login successful", token, isAdmin: user.admin, username: user.username });
 
       } catch (err) {
          console.error("Error logging in user:", err);
@@ -106,6 +106,7 @@ const usersController = {
             message: "Initial login successful",
             authToken: newToken,
             isAdmin: user.admin,
+            username: user.username
          });
 
       } catch (error) {

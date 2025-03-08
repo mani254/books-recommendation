@@ -13,7 +13,7 @@ const TabsComponent = () => {
 	useEffect(() => {
 		const fetchPreferences = async () => {
 			try {
-				const response = await axios.get("http://localhost:8080/api/users/preferences");
+				const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/users/preferences`);
 				setPreferredAuthors(response.data.authors);
 				setPreferredGenres(response.data.genres);
 			} catch (err) {

@@ -12,7 +12,7 @@ const AuthorsList = ({ authors: preferredAuthors, setPreferredAuthors }) => {
 			setError("");
 
 			try {
-				const response = await axios.get("http://localhost:8080/api/authors");
+				const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/authors`);
 				setAuthors(response.data.authors);
 			} catch (err) {
 				setError("Failed to fetch authors. Please try again.");
@@ -29,7 +29,7 @@ const AuthorsList = ({ authors: preferredAuthors, setPreferredAuthors }) => {
 		const isActive = preferredAuthors.some((a) => a._id === author._id);
 
 		try {
-			await axios.post("http://localhost:8080/api/users/update-preferences", {
+			await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/users/update-preferences`, {
 				type: "author",
 				itemId: author._id,
 				action: isActive ? "remove" : "add",

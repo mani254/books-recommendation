@@ -62,7 +62,7 @@ function Register() {
 
 		setLoading(true);
 		try {
-			const response = await axios.post("http://localhost:8080/api/users/register", registerDetails);
+			const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/users/register`, registerDetails);
 
 			if (response) {
 				alert("Registration successful! Redirecting to login...");
@@ -76,9 +76,10 @@ function Register() {
 	};
 
 	return (
-		<div className="min-h-screen flex items-center">
+		<div className="min-h-screen flex flex-col justify-center items-center ">
+			<h5 className="mb-3 text-center max-w-[360px] text-red-500">Register as admin to add update and delete Product</h5>
 			<div className="max-w-md min-w-[400px] mx-auto p-6 bg-white shadow-md rounded-md">
-				<h2 className="text-xl font-semibold mb-4">Register</h2>
+				<h2 className="text-xl font-semibold mb-4 ">Register</h2>
 
 				{serverError && <p className="text-red-500 mb-3">{serverError}</p>}
 

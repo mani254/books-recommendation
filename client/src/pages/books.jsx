@@ -17,7 +17,7 @@ export default function Books() {
 		const fetchBooks = async () => {
 			try {
 				setLoading(true);
-				const response = await axios.get("http://localhost:8080/api/books", { params: searchParams });
+				const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/books`, { params: searchParams });
 				setBooks(response.data.books);
 				setTotalItems(response.data.totalItems);
 			} catch (err) {
@@ -58,7 +58,7 @@ export default function Books() {
 				) : (
 					<div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 						{books.map((book) => (
-							<BookCard key={book._id} book={book} />
+							<BookCard key={book._id} book={book} setBooks={setBooks} />
 						))}
 					</div>
 				)}

@@ -18,23 +18,22 @@ export default function MyApp({ Component, pageProps }) {
 
          if (authToken) {
             try {
-               const res = await axios.post("http://localhost:8080/api/users/initial", {}, {
+               const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/users/initial`, {}, {
                   headers: { Authorization: `Bearer ${authToken}` }
                });
 
-               if (res.data.success) {
+               if (res.data) {
                   localStorage.setItem("authToken", res.data.authToken);
                   localStorage.setItem("isAdmin", res.data.isAdmin);
-               } else {
-                  localStorage.removeItem("authToken");
-                  localStorage.removeItem("isAdmin");
-                  router.push("/login");
+                  localStorage.setItem("username", res.data.username)
                }
             } catch (error) {
                console.error("Initial login failed:", error);
                localStorage.removeItem("authToken");
                localStorage.removeItem("isAdmin");
+               localStorage.removeItem("username")
                router.push("/login");
+               window.alert('login expired login again')
             }
          } else {
             router.push("/login");

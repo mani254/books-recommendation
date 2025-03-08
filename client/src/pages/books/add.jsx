@@ -69,7 +69,7 @@ function Add() {
 
 		async function fetch() {
 			try {
-				const response = await axios.post("http://localhost:8080/api/books", formData, {
+				const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/books`, formData, {
 					headers: { "Content-Type": "multipart/form-data" },
 				});
 

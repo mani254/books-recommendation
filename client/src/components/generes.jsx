@@ -12,7 +12,7 @@ const GenresList = ({ genres: preferredGenres, setPreferredGenres }) => {
 			setError("");
 
 			try {
-				const response = await axios.get("http://localhost:8080/api/genres");
+				const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/genres`);
 				setGenres(response.data.genres);
 			} catch (err) {
 				setError("Failed to fetch genres. Please try again.");
@@ -31,7 +31,7 @@ const GenresList = ({ genres: preferredGenres, setPreferredGenres }) => {
 
 		try {
 			await axios.post(
-				"http://localhost:8080/api/users/update-preferences",
+				`${process.env.NEXT_PUBLIC_API_URL}/api/users/update-preferences`,
 				{
 					type: "genre",
 					itemId: genre._id,
